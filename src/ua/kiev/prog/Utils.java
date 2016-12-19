@@ -1,6 +1,5 @@
 package ua.kiev.prog;
 
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.ByteArrayOutputStream;
@@ -37,10 +36,13 @@ public class Utils {
                     System.out.println("Enter need user: ");
                     String choiceLogin = scanner.nextLine();
                     res = getStatus(choiceLogin);
-                }else if(text.contains("::")){
-                    int cut = text.indexOf("::");
-                    m = new Message(login, text.substring(cut + 2));
-                    m.setTo(text.substring(0, cut).trim());
+                }else if(text.contains("private")){
+                    System.out.println("Enter need user: ");
+                    String choiceLogin = scanner.nextLine();
+                    System.out.println("Enter your message for(" + login +"): ");
+                    text = scanner.nextLine();
+                    m = new Message(login, text);
+                    m.setTo(choiceLogin.trim());
                     res = m.send(getURL() + "/add");
                 }else{
                     m = new Message(login, text);
