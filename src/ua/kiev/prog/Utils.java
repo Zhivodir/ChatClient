@@ -152,7 +152,6 @@ public class Utils {
             r = is.read(buf);
             if (r > 0) bos.write(buf, 0, r);
         } while (r != -1);
-
         return bos.toByteArray();
     }
 }
