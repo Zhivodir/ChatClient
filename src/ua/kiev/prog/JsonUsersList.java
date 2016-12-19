@@ -20,7 +20,7 @@ public class JsonUsersList {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(System.lineSeparator() + "List of users:");
+        sb.append(System.lineSeparator() + "List of users:" + System.lineSeparator());
         for(User user:usersList){
             sb.append(user);
             sb.append(System.lineSeparator());

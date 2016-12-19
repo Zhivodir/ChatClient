@@ -10,13 +10,63 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.Scanner;
 
 
 public class Utils {
     private static final String URL = "http://127.0.0.1";
     private static final int PORT = 8080;
 
+    private Scanner scanner;
+    private String login;
+    private String pswd;
+
     public Utils() {
+        scanner = new Scanner(System.in);
+        try {
+            authorization();
+            System.out.println("Enter your message: ");
+            while (true) {
+                String text = scanner.nextLine();
+                if (text.isEmpty()) break;
+                Message m;
+                int res = 200;
+                if("getusers".equals(text)){
+                    res = sendReqforUsers();
+                }else if(text.contains("::")){
+                    int cut = text.indexOf("::");
+                    m = new Message(login, text.substring(cut + 2));
+                    m.setTo(text.substring(0, cut).trim());
+                    res = m.send(getURL() + "/add");
+                }else{
+                    m = new Message(login, text);
+                    res = m.send(getURL() + "/add");
+                }
+
+                if (res != 200) {
+                    System.out.println("HTTP error occured: " + res);
+                    return;
+                }
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        } finally {
+            scanner.close();
+        }
+    }
+
+    public void authorization(){
+        do{
+            System.out.println("Enter your login: ");
+            login = scanner.nextLine();
+
+            System.out.println("Enter your password: ");
+            pswd = scanner.nextLine();
+        }while(sendReq("/authorization?login=" + login + "&password=" + pswd) != 200);
+
+        Thread thread = new Thread(new GetThread(login));
+        thread.setDaemon(true);
+        thread.start();
     }
 
     public static String getURL() {
