@@ -9,10 +9,12 @@ import com.google.gson.GsonBuilder;
 public class User {
     private String name;
     private String pswd;
+    private UserStatus userStatus;
 
-    public User(String name, String pswd) {
+    public User(String name, String pswd, UserStatus userStatus) {
         this.name = name;
         this.pswd = pswd;
+        this.userStatus = userStatus;
     }
 
     public String getName() {
@@ -31,6 +33,14 @@ public class User {
         this.pswd = pswd;
     }
 
+    public UserStatus getUserStatus() {
+        return userStatus;
+    }
+
+    public void setUserStatus(UserStatus userStatus) {
+        this.userStatus = userStatus;
+    }
+
     public static User fromJSON(String s) {
         Gson gson = new GsonBuilder().create();
         return gson.fromJson(s, User.class);
@@ -38,6 +48,6 @@ public class User {
 
     @Override
     public String toString() {
-        return name;
+        return name + "   " + userStatus;
     }
 }

@@ -31,8 +31,12 @@ public class Utils {
                 if (text.isEmpty()) break;
                 Message m;
                 int res = 200;
-                if("getusers".equals(text)){
+                if("get_users".equals(text)){
                     res = sendReqforUsers();
+                }else if(text.contains("get_status")){
+                    System.out.println("Enter need user: ");
+                    String choiceLogin = scanner.nextLine();
+                    res = getStatus(choiceLogin);
                 }else if(text.contains("::")){
                     int cut = text.indexOf("::");
                     m = new Message(login, text.substring(cut + 2));
@@ -101,6 +105,32 @@ public class Utils {
                 String strBuf = new String(buf, StandardCharsets.UTF_8);
                 usersList = (JsonUsersList) new GsonBuilder().create().fromJson(strBuf, JsonUsersList.class);
                 System.out.println(usersList);
+            } finally {
+                is.close();
+            }
+
+            result = connection.getResponseCode();
+        }catch(MalformedURLException e){e.printStackTrace();}
+        catch (IOException e){e.printStackTrace();}
+        return result;
+    }
+
+    public static int getStatus(String login){
+        int result = 200;
+        User user;
+        HttpURLConnection connection;
+        try {
+            URL url = new URL(getURL() + "/getUserStatus?login=" + login);
+            connection =  (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setDoOutput(true);
+
+            InputStream is = connection.getInputStream();
+            try {
+                byte[] buf = requestBodyToArray(is);
+                String strBuf = new String(buf, StandardCharsets.UTF_8);
+                user = (User) new GsonBuilder().create().fromJson(strBuf, User.class);
+                System.out.println(user);
             } finally {
                 is.close();
             }

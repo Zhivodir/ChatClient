@@ -29,7 +29,7 @@ public class GetThread implements Runnable {
 
                 InputStream is = http.getInputStream();
                 try {
-                    byte[] buf = requestBodyToArray(is);
+                    byte[] buf = Utils.requestBodyToArray(is);
                     String strBuf = new String(buf, StandardCharsets.UTF_8);
 
                     JsonMessages list = gson.fromJson(strBuf, JsonMessages.class);
@@ -48,18 +48,5 @@ public class GetThread implements Runnable {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-    }
-
-    private byte[] requestBodyToArray(InputStream is) throws IOException {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        byte[] buf = new byte[10240];
-        int r;
-
-        do {
-            r = is.read(buf);
-            if (r > 0) bos.write(buf, 0, r);
-        } while (r != -1);
-
-        return bos.toByteArray();
     }
 }
