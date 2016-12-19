@@ -24,14 +24,15 @@ public class Utils {
         scanner = new Scanner(System.in);
         try {
             authorization();
-            System.out.println("Enter your message: ");
+
             while (true) {
+                System.out.println("Enter your text: ");
                 String text = scanner.nextLine();
                 if (text.isEmpty()) break;
                 Message m;
                 int res = 200;
                 if("get_users".equals(text)){
-                    res = sendReqforUsers();
+                    res = sendPrivateMessage();
                 }else if(text.contains("get_status")){
                     System.out.println("Enter need user: ");
                     String choiceLogin = scanner.nextLine();
@@ -39,7 +40,7 @@ public class Utils {
                 }else if(text.contains("private")){
                     System.out.println("Enter need user: ");
                     String choiceLogin = scanner.nextLine();
-                    System.out.println("Enter your message for(" + login +"): ");
+                    System.out.println("Enter your message for(" + choiceLogin +"): ");
                     text = scanner.nextLine();
                     m = new Message(login, text);
                     m.setTo(choiceLogin.trim());
@@ -91,7 +92,7 @@ public class Utils {
         return result;
     }
 
-    public int sendReqforUsers(){
+    public int sendPrivateMessage(){
         int result = 200;
         JsonUsersList usersList;
         HttpURLConnection connection;
